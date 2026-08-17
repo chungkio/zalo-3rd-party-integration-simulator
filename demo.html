@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zalo 3rd-Party Integration Simulator - Interactive HTML Demo</title>
+  
+  <!-- Tailwind CSS CDN & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            zalo: {
+              blue: '#0068FF',
+              dark: '#0052CC',
+              bg: '#0F172A',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar & Animations */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .animate-pulse-subtle { animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    
+    @keyframes slide-in {
+      from { transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-in { animation: slide-in 0.3s ease-out forwards; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+
+  <!-- TOP APP HEADER -->
+  <header class="bg-slate-900/80 border-b border-slate-800 sticky top-0 z-40 glass-panel">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20 font-bold text-white text-xl">
+          Z
+        </div>
+        <div>
+          <h1 class="text-base font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-300">
+            Zalo 3rd-Party Integration Simulator
+          </h1>
+          <p class="text-xs text-slate-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Zalo OpenAPI v3.0 Specs & OAuth v4 PKCE Interactive Demo
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Badges & Controls -->
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2">
+          <span class="text-slate-400">OAuth v4 Token:</span>
+          <span id="tokenTimer" class="font-mono font-bold text-emerald-400">24h 59m</span>
+          <button onclick="refreshTokenDemo()" class="ml-1 text-blue-400 hover:text-blue-300 underline font-semibold">Refresh</button>
+        </div>
+
+        <span class="bg-blue-500/10 text-blue-400 border border-blue-500/30 px-3 py-1.5 rounded-lg font-mono font-semibold flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Standalone HTML Demo
+        </span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN DEMO DASHBOARD WORKSPACE -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT COLUMN: PHONE SIMULATOR (5 Cols) -->
+    <section class="lg:col-span-5 flex flex-col items-center">
+      
+      <div class="w-full max-w-sm bg-slate-900 border-4 border-slate-800 rounded-[40px] shadow-2xl overflow-hidden flex flex-col h-[680px] relative ring-1 ring-white/10">
+        
+        <!-- Phone Speaker Notch / Header -->
+        <div class="bg-slate-900 px-5 pt-3 pb-2 flex items-center justify-between border-b border-slate-800 select-none">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white text-xs shadow-md">
+              OA
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-100 flex items-center gap-1">
+                Zalo Official Account
+                <svg class="w-3.5 h-3.5 text-blue-400 fill-current" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+              </div>
+              <div class="text-[10px] text-emerald-400">Tự động trả lời qua API 3rd-Party</div>
+            </div>
+          </div>
+
+          <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono">v3.0</span>
+        </div>
+
+        <!-- Phone Chat Messages Scroll Container -->
+        <div id="chatMessages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-slate-950 text-xs">
+          
+          <!-- Default Bot Greeting Message -->
+          <div class="flex items-start space-x-2 animate-slide-in">
+            <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">OA</div>
+            <div class="bg-slate-900 border border-slate-800 text-slate-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] space-y-2 shadow-md">
+              <p>👋 Xin chào! Tôi là Trợ lý AI tích hợp <strong>Zalo OA & 3rd-Party Backend</strong>.</p>
+              <p class="text-slate-400 text-[11px]">Bạn có thể thử bấm các <strong>Nút Chức Năng</strong> bên dưới để kiểm tra luồng API gửi/nhận dữ liệu trực tiếp:</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Phone Quick Reply Pill Buttons Bar -->
+        <div class="p-2 bg-slate-900 border-t border-slate-800 overflow-x-auto whitespace-nowrap flex space-x-1.5 scrollbar-none text-[11px]">
+          <button onclick="sendUserMsg('Lấy thông tin tài khoản')" class="px-3 py-1.5 bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-full hover:bg-blue-600 hover:text-white transition-all">
+            👤 Lấy thông tin tài khoản
+          </button>
+          <button onclick="openFormModal()" class="px-3 py-1.5 bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 rounded-full hover:bg-emerald-600 hover:text-white transition-all">
+            ✍️ Cung cấp SĐT & Địa chỉ
+          </button>
+          <button onclick="sendUserMsg('#8899')" class="px-3 py-1.5 bg-amber-600/20 text-amber-300 border border-amber-500/30 rounded-full hover:bg-amber-600 hover:text-white transition-all">
+            📦 Tra cứu đơn #8899
+          </button>
+          <button onclick="sendUserMsg('Lấy vị trí kho')" class="px-3 py-1.5 bg-purple-600/20 text-purple-300 border border-purple-500/30 rounded-full hover:bg-purple-600 hover:text-white transition-all">
+            📍 Lấy vị trí kho
+          </button>
+          <button onclick="sendUserMsg('Gửi voucher ZALO50K')" class="px-3 py-1.5 bg-pink-600/20 text-pink-300 border border-pink-500/30 rounded-full hover:bg-pink-600 hover:text-white transition-all">
+            🎟️ Voucher ZALO50K
+          </button>
+        </div>
+
+        <!-- Phone Chat Input Bar -->
+        <form onsubmit="handleInputSubmit(event)" class="p-2.5 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
+          <input
+            type="text"
+            id="chatInput"
+            placeholder="Nhập tin nhắn (VD: tra cứu đơn hàng, tư vấn giá)..."
+            class="flex-1 bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500"
+          />
+          <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-xl transition-all shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </form>
+
+        <!-- Dynamic Form Submission Modal Inside Phone -->
+        <div id="formModal" class="hidden absolute inset-0 bg-slate-950/90 backdrop-blur-md z-30 p-4 flex flex-col justify-center animate-slide-in">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 shadow-2xl">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+              <h3 class="font-bold text-xs text-emerald-400 flex items-center gap-1.5">
+                📝 Zalo Form Submit (Cung cấp info cho API)
+              </h3>
+              <button onclick="closeFormModal()" class="text-slate-400 hover:text-white text-sm font-bold">&times;</button>
+            </div>
+            
+            <div class="space-y-2 text-xs">
+              <div>
+                <label class="block text-slate-400 text-[10px] mb-1">Họ & Tên *</label>
+                <input type="text" id="formName" value="Trần Văn Nam" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-100 focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-slate-400 text-[10px] mb-1">Số điện thoại Zalo *</label>
+                <input type="text" id="formPhone" value="0912 345 678" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-100 focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-slate-400 text-[10px] mb-1">Địa chỉ giao hàng / liên hệ *</label>
+                <input type="text" id="formAddress" value="456 Nam Kỳ Khởi Nghĩa, Q3, TP.HCM" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-100 focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-slate-400 text-[10px] mb-1">Ghi chú cho CRM</label>
+                <input type="text" id="formNotes" value="Gửi gấp trong giờ hành chính" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-100 focus:border-emerald-500 focus:outline-none" />
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-end gap-2">
+              <button onclick="closeFormModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs hover:bg-slate-700">Hủy</button>
+              <button onclick="submitZaloForm()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs shadow-md">Gửi cho API 3rd-Party</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: REALTIME PIPELINE INSPECTOR (7 Cols) -->
+    <section class="lg:col-span-7 flex flex-col space-y-4">
+      
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl glass-panel flex-1 flex flex-col min-h-[680px]">
+        
+        <!-- Inspector Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping"></span>
+              Visual Pipeline Inspector (Realtime Event Log)
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Trực quan hóa luồng Webhook HTTP 200 OK $\rightarrow$ Async Queue $\rightarrow$ AI Intent Engine $\rightarrow$ CRM Lookup $\rightarrow$ Zalo OpenAPI v3.0</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="clearInspectorLogs()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 font-semibold transition-all">
+              Clear Logs
+            </button>
+          </div>
+        </div>
+
+        <!-- Inspector Logs List Container -->
+        <div id="inspectorLogs" class="flex-1 overflow-y-auto space-y-3 mt-4 pr-1 text-xs font-mono">
+          
+          <div class="text-slate-500 text-center py-12 italic text-xs">
+            Bấm các nút bên Phone Simulator để khởi chạy luồng sự kiện Webhook & API...
+          </div>
+
+        </div>
+
+        <!-- Pipeline Status Summary Footer -->
+        <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-[11px] text-slate-400">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Webhook SLA &lt; 2s: <strong>Pass (120ms)</strong></span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span> Zalo API Spec: <strong>OpenAPI v3.0</strong></span>
+          </div>
+          <span class="font-mono text-slate-500">Events Recorded: <strong id="logCount" class="text-slate-300">0</strong></span>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT DEMO LOGIC ENGINE -->
+  <script>
+    let logCounter = 0;
+
+    const mockCustomerProfile = {
+      name: "Nguyễn Văn Anh",
+      phone: "0908 123 456",
+      email: "nguyenvananh@example.com",
+      tier: "Hội Viên VIP Gold",
+      points: 1250,
+      address: "123 Nguyễn Huệ, Q1, TP.HCM"
+    };
+
+    const mockOrders = {
+      "#8899": { id: "#8899", status: "Đang giao hàng", carrier: "GHN", tracking: "GHN-9988231", delivery: "Hôm nay, trước 18:00", amount: "28.990.000đ" },
+      "#12345": { id: "#12345", status: "Đã hoàn thành", carrier: "Viettel Post", tracking: "VTP-0019284", delivery: "Đã giao thành công", amount: "790.000đ" }
+    };
+
+    function appendUserMessage(text) {
+      const chat = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex justify-end animate-slide-in';
+      msgDiv.innerHTML = `
+        <div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none max-w-[80%] shadow-md">
+          ${text}
+        </div>
+      `;
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function appendBotMessage(text, quickReplies = [], buttons = []) {
+      const chat = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start space-x-2 animate-slide-in';
+      
+      let buttonsHtml = '';
+      if (buttons.length > 0) {
+        buttonsHtml = `<div class="pt-2 mt-2 border-t border-slate-800/80 space-y-1">` +
+          buttons.map(b => `<button onclick="sendUserMsg('${b.payload || b.title}')" class="w-full text-left bg-blue-600/30 hover:bg-blue-600 text-blue-200 hover:text-white px-2.5 py-1.5 rounded text-[11px] font-semibold transition-all border border-blue-500/30 truncate">${b.title}</button>`).join('') +
+          `</div>`;
+      }
+
+      msgDiv.innerHTML = `
+        <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">OA</div>
+        <div class="bg-slate-900 border border-slate-800 text-slate-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] space-y-2 shadow-md">
+          <div>${text}</div>
+          ${buttonsHtml}
+        </div>
+      `;
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addInspectorLog(type, title, details) {
+      const inspector = document.getElementById('inspectorLogs');
+      if (logCounter === 0) inspector.innerHTML = '';
+      logCounter++;
+      document.getElementById('logCount').innerText = logCounter;
+
+      const typeColors = {
+        'WEBHOOK_RECEIVED': 'border-purple-500/40 bg-purple-950/20 text-purple-300',
+        'QUEUE_ENQUEUED': 'border-blue-500/40 bg-blue-950/20 text-blue-300',
+        'AI_ANALYSIS': 'border-cyan-500/40 bg-cyan-950/20 text-cyan-300',
+        'ZALO_SEND_API': 'border-emerald-500/40 bg-emerald-950/20 text-emerald-300',
+        'TOKEN_REFRESH': 'border-amber-500/40 bg-amber-950/20 text-amber-300'
+      };
+
+      const colorClass = typeColors[type] || 'border-slate-800 bg-slate-950 text-slate-300';
+      const timeStr = new Date().toLocaleTimeString('vi-VN', { hour12: false });
+
+      const item = document.createElement('div');
+      item.className = `p-3 rounded-xl border ${colorClass} space-y-2 animate-slide-in shadow-lg`;
+      item.innerHTML = `
+        <div class="flex justify-between items-center">
+          <div class="font-bold flex items-center gap-2 text-[11px]">
+            <span class="px-2 py-0.5 rounded bg-slate-900 border border-current text-[10px] font-mono">${type}</span>
+            <span>${title}</span>
+          </div>
+          <span class="text-[10px] text-slate-400">${timeStr}</span>
+        </div>
+        <pre class="bg-slate-950 p-2 rounded border border-slate-800/80 text-[10px] text-slate-300 overflow-x-auto">${JSON.stringify(details, null, 2)}</pre>
+      `;
+
+      inspector.insertBefore(item, inspector.firstChild);
+    }
+
+    function processPipeline(text, formData = null) {
+      const timestamp = Date.now();
+
+      // Step 1: Webhook Received (< 2s SLA)
+      addInspectorLog('WEBHOOK_RECEIVED', 'Zalo Webhook Received (POST 200 OK)', {
+        event_name: formData ? 'user_submit_form' : 'user_send_text',
+        app_id: '4829103948123904',
+        sender: { id: 'user_zalo_123' },
+        message: { text: text || 'Form Submission' },
+        timestamp
+      });
+
+      // Step 2: Queue Enqueued
+      setTimeout(() => {
+        addInspectorLog('QUEUE_ENQUEUED', 'Async Message Queue Enqueued', {
+          queueName: 'zalo_message_processor_queue',
+          status: 'ENQUEUED',
+          retryPolicy: '3 retries, exponential backoff'
+        });
+      }, 100);
+
+      // Step 3 & 4: AI Analysis & Zalo Send API
+      setTimeout(() => {
+        let replyText = '';
+        let intent = 'UNKNOWN';
+        let confidence = 0.95;
+        let buttons = [];
+
+        const lower = (text || '').toLowerCase();
+
+        if (formData) {
+          intent = 'SUBMIT_FORM_DATA_API';
+          const ticketId = 'TCK-' + Math.floor(100000 + Math.random() * 900000);
+          replyText = `✅ <strong>ĐÃ XÁC NHẬN CUNG CẤP THÔNG TIN TỚI API!</strong><br><br>• <strong>Ticket ID:</strong> #${ticketId}<br>• <strong>Họ tên:</strong> ${formData.name}<br>• <strong>SĐT:</strong> ${formData.phone}<br>• <strong>Địa chỉ:</strong> ${formData.address}<br><br>Thông tin đã được đồng bộ vào CRM Database!`;
+          buttons = [
+            { title: "Xem thông tin tài khoản", payload: "Lấy thông tin tài khoản" },
+            { title: "Tra cứu đơn hàng #8899", payload: "#8899" }
+          ];
+        } else if (lower.includes('thông tin tài khoản') || lower.includes('profile')) {
+          intent = 'GET_USER_PROFILE_API';
+          const p = mockCustomerProfile;
+          replyText = `👤 <strong>THÔNG TIN TÀI KHOẢN CRM:</strong><br><br>• <strong>Họ tên:</strong> ${p.name}<br>• <strong>Cấp độ:</strong> 🌟 ${p.tier}<br>• <strong>Điểm tích lũy:</strong> ${p.points} pts<br>• <strong>SĐT:</strong> ${p.phone}<br>• <strong>Email:</strong> ${p.email}<br>• <strong>Địa chỉ:</strong> ${p.address}`;
+          buttons = [
+            { title: "✍️ Cập nhật SĐT & Địa chỉ mới", payload: "OPEN_FORM_MODAL" },
+            { title: "📦 Tra cứu đơn hàng #8899", payload: "#8899" }
+          ];
+        } else if (lower.includes('#8899') || lower.includes('đơn hàng')) {
+          intent = 'ORDER_INQUIRY';
+          const o = mockOrders["#8899"];
+          replyText = `📦 <strong>Thông tin đơn hàng ${o.id}:</strong><br>• Trạng thái: ${o.status}<br>• Đơn vị vận chuyển: ${o.carrier}<br>• Mã vận đơn: ${o.tracking}<br>• Dự kiến giao: ${o.delivery}<br>• Tổng tiền: ${o.amount}`;
+          buttons = [
+            { title: "Lấy thông tin tài khoản", payload: "Lấy thông tin tài khoản" },
+            { title: "Gửi voucher ZALO50K", payload: "Gửi voucher ZALO50K" }
+          ];
+        } else if (lower.includes('vị trí') || lower.includes('kho')) {
+          intent = 'GET_LOCATION_INFO_API';
+          replyText = `📍 <strong>VỊ TRÍ KHO & VĂN PHÒNG:</strong><br><br>• <strong>Văn phòng:</strong> 123 Lê Duẩn, Q.1, TP.HCM<br>• <strong>Kho tổng:</strong> 456 Quốc lộ 1A, Bình Tân, TP.HCM<br>• <strong>Hotline:</strong> 1900 6868`;
+          buttons = [
+            { title: "Mở Google Maps chỉ đường", payload: "https://maps.google.com" },
+            { title: "Gọi Hotline 1900 6868", payload: "19006868" }
+          ];
+        } else if (lower.includes('voucher') || lower.includes('zalo50k')) {
+          intent = 'VERIFY_VOUCHER_API';
+          replyText = `🎟️ <strong>XÁC THỰC VOUCHER THÀNH CÔNG!</strong><br><br>• <strong>Mã:</strong> ZALO50K<br>• <strong>Ưu đãi:</strong> Giảm 50.000đ cho đơn từ 200.000đ<br>• <strong>Hạn dùng:</strong> 31/12/2026`;
+          buttons = [
+            { title: "Cung cấp SĐT đăng ký", payload: "OPEN_FORM_MODAL" }
+          ];
+        } else {
+          intent = 'GENERAL_GREETING_FALLBACK';
+          replyText = `👋 Trợ lý AI đã ghi nhận yêu cầu: "${text}". Bạn có thể chọn các nút chức năng bên dưới:`;
+          buttons = [
+            { title: "👤 Lấy thông tin tài khoản", payload: "Lấy thông tin tài khoản" },
+            { title: "✍️ Cung cấp SĐT & Địa chỉ", payload: "OPEN_FORM_MODAL" }
+          ];
+        }
+
+        addInspectorLog('AI_ANALYSIS', `AI Intent: [${intent}] (${(confidence * 100).toFixed(0)}%)`, {
+          originalMessage: text,
+          intent,
+          confidence,
+          entitiesExtracted: formData || { userId: 'user_zalo_123' },
+          actionTaken: `Call CRM API & format Zalo OpenAPI v3.0 template`
+        });
+
+        addInspectorLog('ZALO_SEND_API', 'Calling Zalo OpenAPI v3.0 (/v3.0/oa/message/cs)', {
+          endpoint: 'https://openapi.zalo.me/v3.0/oa/message/cs',
+          accessToken: 'zalo_access_token_v3_99812a...',
+          payload: { recipient: { user_id: 'user_zalo_123' }, message: { text: replyText } }
+        });
+
+        appendBotMessage(replyText, [], buttons);
+
+      }, 300);
+    }
+
+    function sendUserMsg(text) {
+      if (text === 'OPEN_FORM_MODAL') {
+        openFormModal();
+        return;
+      }
+      appendUserMessage(text);
+      processPipeline(text);
+    }
+
+    function handleInputSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      sendUserMsg(val);
+    }
+
+    function openFormModal() {
+      document.getElementById('formModal').classList.remove('hidden');
+    }
+
+    function closeFormModal() {
+      document.getElementById('formModal').classList.add('hidden');
+    }
+
+    function submitZaloForm() {
+      const name = document.getElementById('formName').value;
+      const phone = document.getElementById('formPhone').value;
+      const address = document.getElementById('formAddress').value;
+      const notes = document.getElementById('formNotes').value;
+
+      closeFormModal();
+
+      const formData = { name, phone, address, notes };
+      appendUserMessage(`📋 Submit Form: ${name} - ${phone}`);
+      processPipeline(`Submit Form: ${name}`, formData);
+    }
+
+    function clearInspectorLogs() {
+      document.getElementById('inspectorLogs').innerHTML = '<div class="text-slate-500 text-center py-12 italic text-xs">Bấm các nút bên Phone Simulator để khởi chạy luồng sự kiện Webhook & API...</div>';
+      logCounter = 0;
+      document.getElementById('logCount').innerText = '0';
+    }
+
+    function refreshTokenDemo() {
+      addInspectorLog('TOKEN_REFRESH', 'OAuth v4 Token Refreshed', {
+        success: true,
+        message: 'Token OAuth v4 refreshed successfully (Zalo OA OpenAPI v3.0)',
+        newAccessToken: 'zalo_v3_access_token_' + Date.now().toString(36),
+        expiresInSeconds: 90000
+      });
+      alert('⚡ OAuth v4 Token đã làm mới thành công!');
+    }
+  </script>
+
+</body>
+</html>

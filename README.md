@@ -3,6 +3,9 @@
 > **A Complete Simulator & Integration Engine for Zalo Official Account (OA) v3.0 with 3rd-Party CRM / ERP & AI Engine**  
 > Compliant with the **Zalo Developers Hub (2026 Latest Specs)**: OAuth v4 with PKCE, OpenAPI v3.0, Webhook HTTPS < 2s response rules, ZBS Template Messages, and Realtime Visual Pipeline Inspector.
 
+### 🌐 Live HTML Demo (No Installation Required)
+You can directly open the standalone [demo.html](file:///Users/chungkio/ProjectClone/Zalo/demo.html) in any web browser to interactively test the Zalo Phone UI, click buttons, submit form data, and view real-time log inspector streams offline!
+
 ---
 
 ## 🌟 Key Features
