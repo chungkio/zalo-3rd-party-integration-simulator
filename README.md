@@ -1,134 +1,134 @@
 # 🚀 Zalo 3rd-Party Integration Simulator & AI CRM Hub
 
-> **Hệ thống Mô phỏng & Tích hợp Zalo Official Account (OA) v3.0 với CRM / ERP & AI Engine bên thứ 3**  
-> Đáp ứng đầy đủ quy chuẩn **Zalo Developers Hub (Mới nhất 2026)**: OAuth v4 với PKCE, OpenAPI v3.0, Webhook HTTPS < 2s, ZBS Template Message & Realtime Visual Inspector.
+> **A Complete Simulator & Integration Engine for Zalo Official Account (OA) v3.0 with 3rd-Party CRM / ERP & AI Engine**  
+> Compliant with the **Zalo Developers Hub (2026 Latest Specs)**: OAuth v4 with PKCE, OpenAPI v3.0, Webhook HTTPS < 2s response rules, ZBS Template Messages, and Realtime Visual Pipeline Inspector.
 
 ---
 
-## 🌟 Tính Năng Nổi Bật (Key Features)
+## 🌟 Key Features
 
-### 📱 1. Giả Lập Giao Diện Điện Thoại Zalo (Phone Simulator)
-- **Interactive Buttons & Quick Replies**: Mô phỏng đầy đủ các nút bấm hành động (`oa.query.show`, `oa.open.url`, `oa.open.phone`).
-- **Zalo Form Submit Modal**: Khách hàng nhập Họ tên, SĐT, Địa chỉ directly trên giao diện Zalo $\rightarrow$ đẩy trực tiếp về Backend 3rd-party qua Webhook.
-- **Card Templates & Carousel**: Gửi tin nhắn dạng danh sách sản phẩm (List Card), nút chỉ đường Google Maps & gọi Hotline khẩn cấp.
+### 📱 1. Interactive Zalo Phone Simulator
+- **Action Buttons & Quick Replies**: Full support for interactive action buttons (`oa.query.show`, `oa.open.url`, `oa.open.phone`).
+- **Zalo Form Submit Modal**: Users can input Full Name, Phone Number, and Shipping Address directly within the Zalo interface $\rightarrow$ posted to the 3rd-party backend via Webhooks.
+- **Card Templates & Carousels**: Send rich list cards for product catalogs, Google Maps directions, and emergency hotline call triggers.
 
-### ⚡ 2. Visual Pipeline Inspector (Realtime SSE Stream)
-- Trực quan hóa **100% luồng đi của dữ liệu trong thời gian thực** (Realtime Server-Sent Events):
-  1. 📩 `WEBHOOK_RECEIVED` — Tiếp nhận Webhook HTTP POST từ Zalo OA (< 2 giây).
-  2. 📥 `QUEUE_ENQUEUED` — Đưa tin nhắn vào Hàng chờ xử lý bất đồng bộ (Async Queue & Retry Policy).
-  3. 🧠 `AI_ANALYSIS` — Phân tích Ý định (Intent), Bối cảnh (Entities), Cảm xúc (Sentiment) & Điểm tin cậy (Confidence).
-  4. 🗄️ `CRM_LOOKUP` — Truy xuất cơ sở dữ liệu CRM khách hàng (Đơn hàng, Thẻ hội viên, Voucher).
-  5. 📤 `ZALO_SEND_API` — Gọi Zalo OpenAPI v3.0 gửi tin nhắn phản hồi đến người dùng.
-  6. 🔑 `TOKEN_REFRESH` — Tự động làm mới OAuth v4 Access Token.
+### ⚡ 2. Realtime Visual Pipeline Inspector (SSE Stream)
+- Visualize **100% of the live data pipeline** via Server-Sent Events (SSE):
+  1. 📩 `WEBHOOK_RECEIVED` — Ingest Webhook HTTP POST from Zalo OA (< 2-second SLA).
+  2. 📥 `QUEUE_ENQUEUED` — Push message to the Async Processing Queue with exponential retry policies.
+  3. 🧠 `AI_ANALYSIS` — Extract Intent, Context Entities, Sentiment, and Confidence Scores.
+  4. 🗄️ `CRM_LOOKUP` — Query customer CRM records (Order status, Member tier, Vouchers).
+  5. 📤 `ZALO_SEND_API` — Dispatch response payload via Zalo OpenAPI v3.0.
+  6. 🔑 `TOKEN_REFRESH` — Auto-refresh OAuth v4 Access Token.
 
-### 🔑 3. Quản Lý Zalo OAuth v4 & OpenAPI v3.0 Specs
-- **Cơ chế OAuth v4 với PKCE**: Tự động quản lý **Access Token (hạn 25 giờ)** và **Refresh Token (hạn 3 tháng)**.
-- **Chế độ Chuyển đổi linh hoạt**:
-  - `⚡ Mock Offline Mode`: Dùng để lập trình, test UI & chạy kịch bản không cần Zalo thật.
-  - `🚀 Production Mode`: Kết nối trực tiếp với Zalo Developers App ID, App Secret & Zalo Cloud Account (ZCA).
-- **Code Mẫu Xác thực HMAC-SHA256**: Đi kèm code mẫu kiểm tra chữ ký `x-zalo-signature` cho Webhook.
+### 🔑 3. Zalo OAuth v4 & OpenAPI v3.0 Specs
+- **OAuth v4 with PKCE**: Automatic lifecycle management for **Access Token (25-hour expiration)** and **Refresh Token (3-month expiration)**.
+- **Dual Operational Modes**:
+  - `⚡ Mock Offline Mode`: For local development, UI testing, and scenario building without requiring live Zalo credentials.
+  - `🚀 Production Mode`: Connect directly with Zalo Developers App ID, App Secret & Zalo Cloud Account (ZCA).
+- **HMAC-SHA256 Verification Code**: Built-in reference middleware for verifying `x-zalo-signature` request integrity.
 
 ### 🤖 4. AI Engine & CRM Knowledge Base
-- **Nhận diện Ý định tự động (Intent Recognition)**:
-  - `GET_USER_PROFILE_API`: Tra cứu thông tin hồ sơ & hạng thẻ VIP từ CRM.
-  - `SUBMIT_FORM_DATA_API`: Tiếp nhận form đăng ký khách hàng & khởi tạo Ticket ID.
-  - `ORDER_INQUIRY`: Tra cứu đơn hàng (`#8899`, `#12345`, `#9922`) & mã vận đơn.
-  - `VERIFY_VOUCHER_API`: Xác thực mã giảm giá (`ZALO50K`, `VIP2026`).
-  - `GET_LOCATION_INFO_API`: Trả về tọa độ kho tổng & nút mở Google Maps.
-  - `HUMAN_HANDOVER_REQUIRED`: Tự động nhận diện thái độ tiêu cực và kích hoạt kịch bản chuyển Chăm sóc viên.
-- **CRM Knowledge Base Tab**: Giao diện trực quan cho phép chỉnh sửa cơ sở kiến thức FAQ & dữ liệu mẫu.
+- **Automated Intent Recognition**:
+  - `GET_USER_PROFILE_API`: Retrieve customer profile & VIP membership tier from CRM.
+  - `SUBMIT_FORM_DATA_API`: Handle Zalo Form submissions and issue confirmation Ticket IDs.
+  - `ORDER_INQUIRY`: Track shipment & order status (`#8899`, `#12345`, `#9922`).
+  - `VERIFY_VOUCHER_API`: Validate promotional coupon codes (`ZALO50K`, `VIP2026`).
+  - `GET_LOCATION_INFO_API`: Return warehouse coordinates & Google Maps action buttons.
+  - `HUMAN_HANDOVER_REQUIRED`: Detect negative sentiment and trigger agent handover protocols.
+- **CRM Knowledge Base Tab**: Interactive dashboard tab to edit FAQ entries and CRM mock datasets in real-time.
 
 ---
 
-## 🛠️ Công Nghệ Sử Dụng (Tech Stack)
+## 🛠️ Tech Stack
 
 - **Frontend**: React 18, Vite, Tailwind CSS, Lucide React Icons.
 - **Backend**: Node.js, Express.js, Server-Sent Events (SSE).
-- **Tooling & Test**: Concurrently, Native HTTP E2E Pipeline Tester (`scripts/test_pipeline.js`).
+- **Tooling & Testing**: Concurrently, Native HTTP E2E Pipeline Tester (`scripts/test_pipeline.js`).
 
 ---
 
-## 🏗️ Kiến Trúc Hệ Thống (Architecture Overview)
+## 🏗️ Architecture Overview
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as Khách hàng (Zalo App)
+    actor User as User (Zalo App)
     participant ZaloOA as Zalo OpenAPI v3.0
     participant Backend as 3rd-Party Express Server
     participant AI as AI & Intent Engine
     participant CRM as CRM Database
 
-    User->>ZaloOA: Gửi tin nhắn / Bấm Nút / Submit Form
+    User->>ZaloOA: Send Message / Click Button / Submit Form
     ZaloOA->>Backend: HTTP POST /api/webhook/zalo (Webhook < 2s)
-    Backend-->>ZaloOA: Trả về HTTP 200 OK ngay lập tức
+    Backend-->>ZaloOA: Return HTTP 200 OK immediately
     Backend->>Backend: Enqueue Async Worker Queue
-    Backend->>AI: Phân tích Ý định (Intent) & Thực thể (Entities)
-    AI->>CRM: Tra cứu Hồ sơ, Đơn hàng, Voucher, FAQ
-    CRM-->>AI: Dữ liệu CRM phản hồi
+    Backend->>AI: Analyze Intent & Extract Entities
+    AI->>CRM: Query Profile, Order Status, Voucher, FAQ
+    CRM-->>AI: Return CRM Data
     AI->>ZaloOA: POST /v3.0/oa/message/cs (OAuth v4 Access Token)
-    ZaloOA-->>User: Hiển thị tin nhắn dạng Button / List / Text Card
+    ZaloOA-->>User: Display Button / List / Text Card Response
 ```
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt & Chạy Dự Án (Getting Started)
+## 🚀 Getting Started
 
-### 1. Yêu cầu hệ thống
-- **Node.js**: `v18.0.0` trở lên.
-- **npm**: `v9.0.0` trở lên.
+### 1. Prerequisites
+- **Node.js**: `v18.0.0` or higher.
+- **npm**: `v9.0.0` or higher.
 
-### 2. Cài đặt Dependencies
+### 2. Installation
 ```bash
-# Clone repository
+# Clone the repository
 git clone git@github.com:chungkio/zalo-3rd-party-integration-simulator.git
 cd zalo-3rd-party-integration-simulator
 
-# Cài đặt thư viện
+# Install dependencies
 npm install
 ```
 
-### 3. Chạy môi trường Phát triển (Dev Mode)
-Lệnh này sẽ chạy song song cả **Backend Node.js Server (Port 3001)** và **Frontend Vite (Port 5173)**:
+### 3. Running in Development Mode
+This command concurrently starts the **Backend Express Server (Port 3001)** and **Frontend Vite App (Port 5173)**:
 ```bash
 npm run dev
 ```
 
-Sau khi chạy thành công:
-- **Frontend App**: Truy cập `http://localhost:5173`
-- **Backend API**: Truy cập `http://localhost:3001`
+Once running:
+- **Frontend App**: Open `http://localhost:5173`
+- **Backend API**: Open `http://localhost:3001`
 
-### 4. Chạy Bộ Test Tự Động (Automated Integration Tests)
-Mở một terminal mới và chạy bộ test E2E cho toàn bộ kịch bản Interactive Buttons & Form Submit:
+### 4. Running Automated Integration Tests
+Open a separate terminal window and execute the automated E2E test suite for Interactive Buttons & Form Submissions:
 ```bash
 node scripts/test_pipeline.js
 ```
 
 ---
 
-## 📂 Cấu Trúc Thư Mục (Project Structure)
+## 📂 Project Structure
 
 ```text
 zalo-3rd-party-integration-simulator/
 ├── scripts/
-│   └── test_pipeline.js        # Script chạy bộ test tự động E2E
+│   └── test_pipeline.js        # Automated E2E integration test suite
 ├── server/
 │   ├── index.js                # Express Server, SSE Stream & Webhook Endpoints
 │   └── services/
-│       ├── aiEngine.js         # Phân tích AI Intent, Sentiment & Zalo Payloads
-│       ├── zaloTokenManager.js # Quản lý OAuth v4 Access Token & Refresh Token
-│       └── mockCrmDb.js        # Re-export mock database
+│       ├── aiEngine.js         # AI Intent Analysis, Sentiment & Zalo Payloads
+│       ├── zaloTokenManager.js # OAuth v4 Access & Refresh Token Management
+│       └── mockCrmDb.js        # Re-export mock CRM database
 ├── src/
 │   ├── components/
-│   │   ├── ZaloPhoneSimulator.jsx  # Mô phỏng UI Điện thoại Zalo Chat & Form Modal
-│   │   ├── PipelineInspector.jsx   # Visual Realtime Log Stream (SSE)
-│   │   ├── TokenAndConfigModal.jsx # Quản lý Zalo Credentials & Hướng dẫn v3.0
-│   │   ├── CrmKnowledgeBase.jsx    # Giao diện quản lý CRM Database & FAQ
-│   │   └── ErrorBoundary.jsx       # Error Boundary bọc ứng dụng React
+│   │   ├── ZaloPhoneSimulator.jsx  # Zalo Phone UI Chat & Form Submission Modal
+│   │   ├── PipelineInspector.jsx   # Visual Realtime SSE Pipeline Stream
+│   │   ├── TokenAndConfigModal.jsx # Zalo OAuth Credentials & v3.0 Guide
+│   │   ├── CrmKnowledgeBase.jsx    # Interactive CRM & FAQ Management UI
+│   │   └── ErrorBoundary.jsx       # React Error Boundary Wrapper
 │   ├── data/
-│   ├── App.jsx                 # Layout chính dạng Dashboard 2 cột
+│   ├── App.jsx                 # Main 2-Column Dashboard Layout
 │   ├── main.jsx
-│   └── index.css               # Styling & Tailwind CSS setup
+│   └── index.css               # Styling & Tailwind CSS Setup
 ├── package.json
 ├── tailwind.config.js
 ├── vite.config.js
@@ -137,6 +137,6 @@ zalo-3rd-party-integration-simulator/
 
 ---
 
-## 📜 Giấy Phép (License)
+## 📜 License
 
-Dự án phát triển mã nguồn mở theo giấy phép **MIT License**. Bạn có thể tự do sử dụng và tích hợp vào hệ thống doanh nghiệp của mình.
+Distributed under the **MIT License**. Feel free to customize and integrate this simulator into your enterprise workflows.
